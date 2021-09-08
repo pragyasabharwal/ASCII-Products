@@ -23,9 +23,19 @@ const Products = () => {
 
         if (sortByPrice) {
           setIsLoading(true);
-          await fetch(
-            `${window.location.href}api/products?_sort=price`
-          )
+          await fetch(`${window.location.href}api/products?_sort=price`)
+            .then((res) => res.json())
+            .then((data) => setProducts(data));
+        }
+        if (sortByID) {
+          setIsLoading(true);
+          await fetch(`${window.location.href}api/products?_sort=id`)
+            .then((res) => res.json())
+            .then((data) => setProducts(data));
+        }
+        if (sortBySize) {
+          setIsLoading(true);
+          await fetch(`${window.location.href}api/products?_sort=size`)
             .then((res) => res.json())
             .then((data) => setProducts(data));
         }
@@ -36,7 +46,7 @@ const Products = () => {
         setIsLoading(false);
       }
     })();
-  }, [page, sortByPrice]);
+  }, [page, sortByPrice, sortByID, sortBySize]);
 
   console.log("page", allProducts);
 
@@ -78,12 +88,25 @@ const Products = () => {
       <div>Sort By:</div>
       Price
       <input
+        name="sort"
         type="radio"
         checked={sortByPrice}
         onClick={() => setSortByPrice((prev) => !prev)}
       ></input>
-      ID<input type="radio" checked={sortByID}></input>
-      Size<input type="radio" checked={sortBySize}></input>
+      ID
+      <input
+        name="sort"
+        type="radio"
+        checked={sortByID}
+        onClick={() => setSortByID((prev) => !prev)}
+      ></input>
+      Size
+      <input
+        type="radio"
+        name="sort"
+        checked={sortBySize}
+        onClick={() => setSortBySize((prev) => !prev)}
+      ></input>
       <div
         style={{
           display: "grid",
