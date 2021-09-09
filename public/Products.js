@@ -83,7 +83,7 @@ const Products = () => {
       return "Today";
     }
     if (diffTime > 7) {
-      return `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`;
+      return `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`;
     } else {
       return `${Math.floor(diffTime)} days ago`;
     }
@@ -91,33 +91,51 @@ const Products = () => {
 
   return (
     <div>
-      <div>Sort By:</div>
-      Price
-      <input
-        name="sort"
-        type="radio"
-        checked={sortByPrice}
-        onClick={() => setSortByPrice((prev) => !prev)}
-      ></input>
-      ID
-      <input
-        name="sort"
-        type="radio"
-        checked={sortByID}
-        onClick={() => setSortByID((prev) => !prev)}
-      ></input>
-      Size
-      <input
-        type="radio"
-        name="sort"
-        checked={sortBySize}
-        onClick={() => setSortBySize((prev) => !prev)}
-      ></input>
+      <div
+        style={{
+          border: "2px solid gray",
+          padding: "1em",
+          margin: "1em",
+          display: "flex",
+          justifyContent: "space-evenly",
+        }}
+      >
+        <div style={{ fontSize: "1.2em", fontWeight: "bolder" }}>Sort By:</div>
+        <div>
+          Price
+          <input
+            style={{ alignSelf: "center" }}
+            name="sort"
+            type="radio"
+            checked={sortByPrice}
+            onClick={() => setSortByPrice((prev) => !prev)}
+          ></input>
+        </div>
+        <div>
+          ID
+          <input
+            name="sort"
+            type="radio"
+            checked={sortByID}
+            onClick={() => setSortByID((prev) => !prev)}
+          ></input>
+        </div>
+        <div>
+          Size
+          <input
+            type="radio"
+            name="sort"
+            checked={sortBySize}
+            onClick={() => setSortBySize((prev) => !prev)}
+          ></input>
+        </div>
+      </div>
       <div
         style={{
           display: "grid",
           gridGap: "2px",
           gridTemplateColumns: "repeat(3, 1fr)",
+          gridTemplateRows: "1fr",
           alignItems: "center",
           justifyContent: "center",
           width: "100%",
@@ -127,10 +145,17 @@ const Products = () => {
           console.log(typeof item);
           if (products.length === index + 1) {
             return (
-              <div ref={lastEl}>
+              <div
+                ref={lastEl}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 {typeof item !== "string" && (
                   <div>
-                    <h1>{index}</h1>
                     <div
                       key={item.id}
                       style={{
@@ -154,8 +179,14 @@ const Products = () => {
             return (
               <div>
                 {typeof item !== "string" && (
-                  <div>
-                    <h1>{index}</h1>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <div
                       key={item.id}
                       style={{
@@ -166,7 +197,16 @@ const Products = () => {
                     >
                       {item.face}
                     </div>
-                    <div>$ {item.price / 100} </div>
+                    <button
+                      style={{
+                        background: "green",
+                        color: "white",
+                        border: "none",
+                        padding: "1em",
+                      }}
+                    >
+                      $ {item.price / 100}{" "}
+                    </button>
                     <div>{formatDate(item.date)}</div>
                   </div>
                 )}
@@ -178,8 +218,10 @@ const Products = () => {
           }
         })}
       </div>
-      {isLoading && <h1>Loading...</h1>}
-      {products.length == allProducts && <h1>End of catalogue...</h1>}
+      {isLoading && <h1 style={{ margin: "1em" }}>Loading...</h1>}
+      {products.length == allProducts && (
+        <h1 style={{ margin: "1em" }}>End of catalogue...</h1>
+      )}
     </div>
   );
 };
