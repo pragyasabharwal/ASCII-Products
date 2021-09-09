@@ -15,7 +15,14 @@ const Products = () => {
           `${window.location.href}api/products?_page=${page}&_limit=100`
         )
           .then((res) => res.json())
-          .then((data) => setProducts((prev) => prev.concat(data)));
+          .then((data) => {
+            for (var i = 0; i < data.length; i++) {
+              if (i % 20 === 0 && i !== 0) {
+                data.splice(i, 0, "/ads/?r=1");
+              }
+            }
+            setProducts((prev) => prev.concat(data));
+          });
 
         await fetch(`${window.location.href}api/products`)
           .then((res) => res.json())
@@ -48,7 +55,7 @@ const Products = () => {
     })();
   }, [page, sortByPrice, sortByID, sortBySize]);
 
-  console.log("page", allProducts);
+  console.log("products", products);
 
   const observer = React.useRef();
   const lastEl = React.useCallback(
@@ -66,8 +73,6 @@ const Products = () => {
     },
     [products, allProducts]
   );
-
-  console.log(products.length);
 
   const formatDate = (date) => {
     var date = new Date(date);
@@ -118,38 +123,53 @@ const Products = () => {
         }}
       >
         {products.map((item, index) => {
+          console.log(typeof item);
           if (products.length === index + 1) {
             return (
               <div ref={lastEl}>
-                <div
-                  key={item.id}
-                  style={{
-                    margin: "1.5em",
-                    justifySelf: "center",
-                    fontSize: `${item.size}px`,
-                  }}
-                >
-                  {item.face}
-                </div>
-                <div>$ {item.price / 100} </div>
-                <div>{formatDate(item.date)}</div>
+                {typeof item !== "string" && (
+                  <div>
+                    <div
+                      key={item.id}
+                      style={{
+                        margin: "1.5em",
+                        justifySelf: "center",
+                        fontSize: `${item.size}px`,
+                      }}
+                    >
+                      {item.face}
+                    </div>
+                    <div>$ {item.price / 100} </div>
+                    <div>{formatDate(item.date)}</div>
+                  </div>
+                )}
+                {typeof item === "string" && (
+                  <img style={{ background: "yellow" }} src={item}></img>
+                )}
               </div>
             );
           } else {
             return (
               <div>
-                <div
-                  key={item.id}
-                  style={{
-                    margin: "1.5em",
-                    justifySelf: "center",
-                    fontSize: `${item.size}px`,
-                  }}
-                >
-                  {item.face}
-                </div>
-                <div>$ {item.price / 100} </div>
-                <div>{formatDate(item.date)}</div>
+                {typeof item !== "string" && (
+                  <div>
+                    <div
+                      key={item.id}
+                      style={{
+                        margin: "1.5em",
+                        justifySelf: "center",
+                        fontSize: `${item.size}px`,
+                      }}
+                    >
+                      {item.face}
+                    </div>
+                    <div>$ {item.price / 100} </div>
+                    <div>{formatDate(item.date)}</div>
+                  </div>
+                )}
+                {typeof item === "string" && (
+                  <img style={{ background: "yellow" }} src={item}></img>
+                )}
               </div>
             );
           }
