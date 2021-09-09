@@ -6,19 +6,20 @@ const Products = () => {
   const [sortByPrice, setSortByPrice] = React.useState(false);
   const [sortByID, setSortByID] = React.useState(false);
   const [sortBySize, setSortBySize] = React.useState(false);
+  const random = Math.floor(Math.random() * 1000 + Math.random() * 1000);
 
   React.useEffect(() => {
     (async function () {
       try {
         setIsLoading(true);
         await fetch(
-          `${window.location.href}api/products?_page=${page}&_limit=100`
+          `${window.location.href}api/products?_page=${page}&_limit=21`
         )
           .then((res) => res.json())
           .then((data) => {
             for (var i = 0; i < data.length; i++) {
               if (i % 20 === 0 && i !== 0) {
-                data.splice(i, 0, "/ads/?r=1");
+                data.splice(i, 0, `/ads/?r=${random}`);
               }
             }
             setProducts((prev) => prev.concat(data));
@@ -129,6 +130,7 @@ const Products = () => {
               <div ref={lastEl}>
                 {typeof item !== "string" && (
                   <div>
+                    <h1>{index}</h1>
                     <div
                       key={item.id}
                       style={{
@@ -153,6 +155,7 @@ const Products = () => {
               <div>
                 {typeof item !== "string" && (
                   <div>
+                    <h1>{index}</h1>
                     <div
                       key={item.id}
                       style={{
